@@ -1,12 +1,13 @@
 <template>
-  <div>
-    <h2>Friends List</h2>
+  <div class="friend-list">
+    <h1>Your Friends</h1>
+    <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="Search friends by name"
+    />
     <ul>
-      <li
-          v-for="friend in sortedFriends"
-          :key="friend.id"
-          :style="{ backgroundColor: getHighlight(friend) }"
-      >
+      <li v-for="friend in filteredFriends" :key="friend.id">
         {{ friend.first_name }} {{ friend.last_name }}
       </li>
     </ul>
@@ -14,51 +15,79 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from "vue";
+import {ref, computed, onMounted} from "vue";
 import axios from "axios";
+
+interface Friend {
+  id: number;
+  first_name: string;
+  last_name: string;
+}
 
 export default {
   name: "FriendList",
-  props: {
-    selectedUsers: {
-      type: Array,
-      required: true,
-    },
-  },
-  setup(props) {
-    const friends = ref([]);
+  setup() {
+    const friends = ref<Friend[]>([]);
+    const searchQuery = ref("");
 
     const fetchFriends = async () => {
-      const allFriends = [];
-      for (const user of props.selectedUsers) {
-        const { data } = await axios.get(
+      const token = localStorage.getItem("vk_token");
+      if (!token) return;
+
+      try {
+        const {data} = await axios.get(
             `https://api.vk.com/method/friends.get`,
             {
               params: {
-                user_id: user.id,
+                access_token: token,
                 fields: "first_name,last_name",
-                access_token: "YOUR_ACCESS_TOKEN",
                 v: "5.131",
               },
             }
         );
-        allFriends.push(...data.response.items);
+        friends.value = data.response.items;
+      } catch (error) {
+        console.error("Error fetching friends:", error);
       }
-      friends.value = allFriends;
     };
 
-    const sortedFriends = computed(() =>
-        friends.value.sort((a, b) => a.last_name.localeCompare(b.last_name))
+    const filteredFriends = computed(() =>
+        friends.value.filter((friend) => {
+          const fullName = `${friend.first_name} ${friend.last_name}`.toLowerCase();
+          return fullName.includes(searchQuery.value.toLowerCase());
+        })
     );
 
-    const getHighlight = (friend: any) => {
-      const count = friends.value.filter((f) => f.id === friend.id).length;
-      return count > 1 ? "lightblue" : "white";
-    };
+    onMounted(fetchFriends);
 
-    fetchFriends();
-
-    return { sortedFriends, getHighlight };
+    return {friends, searchQuery, filteredFriends};
   },
 };
 </script>
+
+
+<style scoped>
+.friend-list {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+input {
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+</style>
