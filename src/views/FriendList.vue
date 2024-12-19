@@ -4,15 +4,6 @@ import { storeToRefs } from "pinia";
 import SearchBar from "../components/SearchBar.vue";
 import SourceList from "../components/SourceList.vue";
 
-interface User {
-  id: number;
-  name: string;
-  photo: string;
-  gender: string;
-  age: number;
-  friendCount: number;
-}
-
 const userStore = useUserStore();
 const { sourceList, friends } = storeToRefs(userStore);
 
