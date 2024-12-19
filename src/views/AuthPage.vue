@@ -1,19 +1,20 @@
 <script lang="ts">
+import AuthButton from '../components/AuthButton.vue'
 
 export default {
   name: "AuthPage",
   setup() {
-    console.log("AuthPage loaded!")
 
     const authorize = () => {
-      const clientId = "YOUR_CLIENT_ID"; // Укажите свой VK client_id
-      const redirectUri = "http://localhost:5173/friends"; // URI для возврата после авторизации
+      const clientId = "52867458";
+      const redirectUri = "http://localhost:5173/friends";
       const authUrl = `https://oauth.vk.com/authorize?client_id=${clientId}&display=page&redirect_uri=${redirectUri}&scope=friends&response_type=token&v=5.131`;
       window.location.href = authUrl;
     };
 
     return {authorize};
   },
+  components: {AuthButton}
 };
 </script>
 
@@ -21,7 +22,8 @@ export default {
   <div class="card">
     <h1>Добро пожаловать в VK Friend Finder</h1>
     <p>Войдите, чтобы увидеть список друзей ВКонтакте!</p>
-    <button class="btn">Войти через VK</button>
+    <AuthButton></AuthButton>
+    <button class="btn" @click="authorize">Войти через VK</button>
   </div>
 </template>
 
