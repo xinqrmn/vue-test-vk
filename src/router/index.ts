@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import AuthPage from "../views/AuthPage.vue";
 import FriendList from "../views/FriendList.vue";
 
+console.log(AuthPage)
+console.log(FriendList)
+
 const routes = [
     {
         path: "/",
