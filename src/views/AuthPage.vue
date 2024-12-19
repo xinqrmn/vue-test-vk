@@ -1,18 +1,9 @@
-<template>
-  <div class="auth-page">
-    <div class="auth-container">
-      <h1>Welcome to VK Friend Finder</h1>
-      <p>Log in to explore your VK friend list!</p>
-      <button @click="authorize">Login with VK</button>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 
 export default {
   name: "AuthPage",
   setup() {
+    console.log("AuthPage loaded!")
 
     const authorize = () => {
       const clientId = "YOUR_CLIENT_ID"; // Укажите свой VK client_id
@@ -21,42 +12,57 @@ export default {
       window.location.href = authUrl;
     };
 
-    return { authorize };
+    return {authorize};
   },
 };
 </script>
 
+<template>
+  <div class="card">
+    <h1>Добро пожаловать в VK Friend Finder</h1>
+    <p>Войдите, чтобы увидеть список друзей ВКонтакте!</p>
+    <button class="btn">Войти через VK</button>
+  </div>
+</template>
+
 <style scoped>
-.auth-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: linear-gradient(120deg, #4c75a3, #ffffff);
-  font-family: Arial, sans-serif;
-}
-
-.auth-container {
+.card {
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: black;
+  border-radius: 16px;
+  padding: 24px;
   text-align: center;
-  background: #fff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
 }
 
-button {
-  margin-top: 20px;
-  background-color: #4c75a3;
-  color: #fff;
+.btn {
+  background-color: #0067c0;
+  color: white;
   border: none;
   padding: 10px 20px;
-  font-size: 18px;
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 5px;
-  transition: background 0.3s;
+  font-size: 16px;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #395c87;
+.btn:hover {
+  background-color: #0055a5;
+}
+
+.card {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>
