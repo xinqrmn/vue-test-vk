@@ -25,8 +25,8 @@
 1. Clone the repository:
    
    ```bash
-     git clone https://github.com/xinqrmn/vue-test-vk.git
-     cd vue-test-vk
+   git clone https://github.com/xinqrmn/vue-test-vk.git
+   cd vue-test-vk
    ```
    
 2. Install dependencies:
@@ -48,4 +48,4 @@
   ```
 
 ## **Deployment**
-The project is deployed on Netlify.
+The project is deployed on [Netlify](https://vue-test-vk.netlify.app/).
