@@ -1,29 +1,23 @@
-<script lang="ts">
+<script lang="ts" setup>
 import AuthButton from '../components/AuthButton.vue'
+import router from "../router";
 
-export default {
-  name: "AuthPage",
-  setup() {
+const authorize = () => {
+  // const clientId = "52867464";
+  // const redirectUri = "https://vue-test-vk.netlify.app";
+  // const authUrl = `https://oauth.vk.com/authorize?client_id=${clientId}&display=page&redirect_uri=${redirectUri}&scope=friends&response_type=token&v=5.131`;
+  // window.location.href = authUrl;
 
-    const authorize = () => {
-      const clientId = "52867458";
-      const redirectUri = "http://localhost:5173/friends";
-      const authUrl = `https://oauth.vk.com/authorize?client_id=${clientId}&display=page&redirect_uri=${redirectUri}&scope=friends&response_type=token&v=5.131`;
-      window.location.href = authUrl;
-    };
-
-    return {authorize};
-  },
-  components: {AuthButton}
+  router.push('/friends');
 };
+
 </script>
 
 <template>
   <div class="card">
     <h1>Добро пожаловать в VK Friend Finder</h1>
     <p>Войдите, чтобы увидеть список друзей ВКонтакте!</p>
-    <AuthButton></AuthButton>
-    <button class="btn" @click="authorize">Войти через VK</button>
+    <AuthButton @click="authorize"></AuthButton>
   </div>
 </template>
 
@@ -38,21 +32,6 @@ export default {
   width: 100%;
 }
 
-.btn {
-  background-color: #0067c0;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-}
-
-.btn:hover {
-  background-color: #0055a5;
-}
-
 .card {
   animation: fadeIn 0.6s ease-out;
 }
@@ -65,6 +44,17 @@ export default {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 18px;
   }
 }
 </style>

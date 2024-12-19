@@ -1,47 +1,40 @@
-<template>
-  <div id="vk-auth-button"></div>
-</template>
-
 <script>
-export default {
+import * as VKID from "@vkid/sdk";
+import {defineComponent, onMounted} from "vue";
+
+export default defineComponent({
   name: "AuthButton",
-  mounted() {
-    if (window.VKIDSDK) {
-      const VKID = window.VKIDSDK;
+  setup() {
+    onMounted(() => {
 
       VKID.Config.init({
         app: 52867464,
-        redirectUrl: "https://vue-test-vk.netlify.app/",
-        responseMode: VKID.ConfigResponseMode.CallBack,
-        source: VKID.ConfigSource.LOWCODE,
-        scope: "",
+        redirectUrl: "https://vue-test-vk.netlify.app",
+        // responseMode: VKID.ConfigResponseMode.Callback,
       });
 
       const oneTap = new VKID.OneTap();
+      const container = document.getElementById('vk-auth-button');
 
-      oneTap
-          .render({
-            container: document.getElementById("vk-auth-button"),
-            showAlternativeLogin: true,
-          })
-          .on(VKID.WidgetEvents.ERROR, this.onError)
-          .on(VKID.OneTapInternalEvents.LOGIN_SUCCESS, this.onSuccess);
-    }
-  },
-  methods: {
-    onSuccess(payload) {
-      console.log("Login Success:", payload);
-      const { code, device_id } = payload;
-
-      window.VKIDSDK.Auth.exchangeCode(code, device_id)
-          .then((data) => {
-            console.log("Token Data:", data);
-          })
-          .catch(this.onError);
-    },
-    onError(error) {
-      console.error("VK Auth Error:", error);
-    },
-  },
-};
+      if (container) {
+        oneTap
+            .render({container: container, scheme: VKID.Scheme.LIGHT, lang: VKID.Languages.RUS})
+            .on(VKID.WidgetEvents.ERROR)
+            .on("LOGIN_SUCCESS", (payload) => {
+              console.log("Login success:", payload);
+            })
+            .on("ERROR", (error) => {
+              console.error("VK Auth Error:", error);
+            })
+      }
+    })
+  }
+})
 </script>
+
+<template>
+  <div class="vk-btn" id="vk-auth-button"></div>
+</template>
+
+<style>
+</style>
